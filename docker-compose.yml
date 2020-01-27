@@ -1,0 +1,30 @@
+version: "2"
+services:
+  openvpn:
+    build: ./openvpn/
+    restart: always
+    image: openvpn
+    container_name: openvpn
+    hostname: openvpn
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./openvpn/data:/openvpn
+      - ./openvpn/statusopenvpn:/status
+    ports:
+      - 443:443/tcp
+  bind:
+    build: ./bind/
+    restart: always
+    image: bind
+    container_name: bind
+    hostname: bind
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+networks:
+ default:
+  ipam:
+   driver: default
+   config:
+   - subnet: 172.24.0.0/16
